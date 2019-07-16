@@ -19,7 +19,14 @@ router.get('/test', function(req, res, next) {
     .then(html => {
       let ulList = [];
       const $ = cheerio.load(html.data);
+      var jsonData = JSON.parse(html.data);
 
+      if(jsonData.hasOwnProperty('rows'))
+      {
+      //  $.each(json, function(key, value){
+      //    alert('key:' + key + ' / ' + 'value:' + value);
+      //  });
+      }
       //const $bodyList = $("div.headline-list ul").children("li.section02");
       const $bodyList = $("div.sc-htpNat").children("div.sc-bdVaJa");
       $bodyList.each(function(i, elem) {
@@ -35,10 +42,31 @@ router.get('/test', function(req, res, next) {
 
       const data = ulList.filter(n => n.title);
       res.render('malang-cow/test', {rows: data});
-      console.log("이거ㅔ 뭐얌"+html.data.page);
+      console.log("이거ㅔ 뭐얌"+jsonData);
     });
 });
 
+router.get('/test2', function(req, res, next) {
+  getHtml()
+    .then(html => {
+          console.log("이거ㅔ 뭐얌"+html.data.rows);
+          var rows = html.data.rows;
+          console.log("변환 전 : "+typeof rows);
+
+          var str =  JSON.stringify(rows);
+          console.log("변환 전 : "+typeof str);
+          console.log(str);
+          res.render('malang-cow/test', {str: str});
+
+          //대괄호 지워라!
+          for(key in rows) {
+              console.log('key:' + key + ' / ' + 'value:' + rows.name);
+          }
+
+        //  var jsonData = JSON.parse(rows);
+
+    });
+});
 
 
 module.exports = router;
