@@ -5,7 +5,7 @@
 </head>
 
     <table border="1" style="width:600px">
-        <caption>test</caption>
+        <caption>festa.io new List</caption>
         <colgroup>
             <col width='8%' />
             <col width='*%' />
@@ -15,12 +15,24 @@
         <thead>
             <tr>
                 <th>No.</th>
-                <th>Title</th>
+                <th>name</th>
                 <th>Date</th>
             </tr>
         </thead>
         <tbody>
-          <%=str%>
+
+                <%
+                 for(var i=0; i<rows.length; i++) {
+                %>
+                <tr>
+                        <td><%=rows.length-i%></td>
+                        <td><%=rows[i].name%></td>
+                        <td><%=rows[i].createdAt%></td>
+                </tr>
+               
+                <%
+                 }
+                %>
         
         </tbody>
     </table>

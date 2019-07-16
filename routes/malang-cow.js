@@ -1,9 +1,23 @@
 var express = require('express');
 var router = express.Router();
-
+var firebase = require("firebase");
+var dateFormat = require('dateformat');
 const axios = require("axios");
 const cheerio = require("cheerio");
 
+
+
+var config = {
+  apiKey: "AIzaSyCjhGDDIg7bUy5SGjp4tytNwH8y71TyEYk",
+  authDomain: "gaehyunee-toy.firebaseapp.com",
+  databaseURL: "https://gaehyunee-toy.firebaseio.com",
+  projectId: "gaehyunee-toy",
+  storageBucket: "",
+  messagingSenderId: "665024156368"
+};
+
+firebase.initializeApp(config);
+var db = firebase.firestore();
 
 const getHtml = async () => {
   try {
@@ -13,57 +27,36 @@ const getHtml = async () => {
   }
 };
 
+router.post('/malangSave', function(req, res, next){
+  var postData = req.body;
+  postData.reg_dt = Date.now();
+  var doc = db.collection("user").doc();
+  doc.set(postData);
 
-router.get('/test', function(req, res, next) {
-  getHtml()
-    .then(html => {
-      let ulList = [];
-      const $ = cheerio.load(html.data);
-      var jsonData = JSON.parse(html.data);
-
-      if(jsonData.hasOwnProperty('rows'))
-      {
-      //  $.each(json, function(key, value){
-      //    alert('key:' + key + ' / ' + 'value:' + value);
-      //  });
-      }
-      //const $bodyList = $("div.headline-list ul").children("li.section02");
-      const $bodyList = $("div.sc-htpNat").children("div.sc-bdVaJa");
-      $bodyList.each(function(i, elem) {
-        ulList[i] = {
-            title: $(this).find('h3.EventCard__Title-sc-1fkxjid-7').text(),
-          //  url: $(this).find('strong.news-tl a').attr('href'),
-          //  image_url: $(this).find('p.poto a img').attr('src'),
-          //  image_alt: $(this).find('p.poto a img').attr('alt'),
-        //    summary: $(this).find('p.lead').text().slice(0, -11),
-            date: $(this).find('span.EventCard__TimeRow-sc-1fkxjid-6').text()
-        };
-      });
-
-      const data = ulList.filter(n => n.title);
-      res.render('malang-cow/test', {rows: data});
-      console.log("이거ㅔ 뭐얌"+jsonData);
-    });
+  res.redirect('index');
 });
+
+
+router.get('/index', function(req,res,next){
+  res.render('malang-cow/index', {row: ""});
+});
+
 
 router.get('/test2', function(req, res, next) {
   getHtml()
     .then(html => {
-          console.log("이거ㅔ 뭐얌"+html.data.rows);
+
+          let conList = [];
+
           var rows = html.data.rows;
-          console.log("변환 전 : "+typeof rows);
 
-          var str =  JSON.stringify(rows);
-          console.log("변환 전 : "+typeof str);
-          console.log(str);
-          res.render('malang-cow/test', {str: str});
-
-          //대괄호 지워라!
-          for(key in rows) {
-              console.log('key:' + key + ' / ' + 'value:' + rows.name);
+          for(var i = 0; i < rows.length; i++){
+            conList[i]={
+              name : rows[i].name,
+              createdAt :  rows[i].createdAt
+            }
           }
-
-        //  var jsonData = JSON.parse(rows);
+          res.render('malang-cow/test', {rows: conList}); 
 
     });
 });
