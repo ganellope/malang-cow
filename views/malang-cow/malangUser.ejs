@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>malangUser</title>
+</head>
+
+
+    <table border="1" style="width:600px">
+        <caption>malangUser</caption>
+        <colgroup>
+            <col width='8%' />
+            <col width='*%' />
+            <col width='15%' />
+            <col width='15%' />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>email</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        <%
+             for(var i=0; i<rows.length; i++) {
+        %>
+            <tr>
+                <td><%=rows.length-i%></td>
+                <td><%=rows[i].email%></td>
+                <td><%=rows[i].reg_dt%></td>
+            </tr>
+        <%
+             }
+        %>
+        </tbody>
+    </table>
+</body>
+</html>

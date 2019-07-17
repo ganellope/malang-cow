@@ -32,9 +32,26 @@ router.post('/malangSave', function(req, res, next){
   postData.reg_dt = Date.now();
   var doc = db.collection("user").doc();
   doc.set(postData);
-
   res.redirect('index');
+
 });
+
+router.get('/malangUser', function(req, res, next){
+  db.collection('user').orderBy("reg_dt", "desc").get()
+      .then((snapshot) => {
+          var rows = [];
+          snapshot.forEach((doc) => {
+              var childData = doc.data();
+              childData.reg_dt = dateFormat(childData.reg_dt, "yyyy-mm-dd");
+              rows.push(childData);
+          });
+          res.render('malang-cow/malangUser', {rows: rows});
+      })
+      .catch((err) => {
+          console.log('Error getting documents', err);
+      });
+});
+
 
 
 router.get('/index', function(req,res,next){
@@ -56,7 +73,7 @@ router.get('/test2', function(req, res, next) {
               createdAt :  rows[i].createdAt
             }
           }
-          res.render('malang-cow/test', {rows: conList}); 
+          res.render('malang-cow/test', {rows: conList});
 
     });
 });
