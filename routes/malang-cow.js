@@ -4,7 +4,7 @@ var firebase = require("firebase");
 var dateFormat = require('dateformat');
 const axios = require("axios");
 const cheerio = require("cheerio");
-
+const nodemailer = require('nodemailer');
 
 
 var config = {
@@ -76,6 +76,36 @@ router.get('/test2', function(req, res, next) {
           res.render('malang-cow/test', {rows: conList});
 
     });
+});
+
+router.get("/nodemailerTest", function(req, res, next){
+  let email = req.body.email;
+
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'gaehyunee@gmail.com',  // gmail 계정 아이디를 입력
+      pass: ''          // gmail 계정의 비밀번호를 입력
+    }
+  });
+
+  let mailOptions = {
+    from: 'gaehyunee@gmail.com',    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
+    to: email ,                     // 수신 메일 주소
+    subject: 'Sending Email using Node.js',   // 제목
+    text: 'That was easy!'  // 내용
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    }
+    else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+
+  res.redirect("/");
 });
 
 
