@@ -52,6 +52,8 @@ router.get('/malangUser', function(req, res, next){
       });
 });
 
+router.post('')
+
 
 
 router.get('/index', function(req,res,next){
@@ -59,7 +61,7 @@ router.get('/index', function(req,res,next){
 });
 
 
-router.get('/test2', function(req, res, next) {
+router.get('/festaList', function(req, res, next) {
   getHtml()
     .then(html => {
 
@@ -73,7 +75,7 @@ router.get('/test2', function(req, res, next) {
               createdAt :  rows[i].createdAt
             }
           }
-          res.render('malang-cow/test', {rows: conList});
+          res.render('malang-cow/festaList', {rows: conList});
 
     });
 });
